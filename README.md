@@ -5,13 +5,79 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+📦 smart-community-management
+├── 📂 src
+│   ├── 📂 app  # Next.js App Router
+│   │   ├── 📂 api
+│   │   │   ├── 📂 auth            # Authentication services (JWT, OAuth, etc.)
+│   │   │   │   ├── login.ts
+│   │   │   │   ├── register.ts
+│   │   │   │   ├── logout.ts
+│   │   │   │   ├── middleware.ts  # Protect routes
+│   │   │   │   ├── session.ts     # Session validation
+│   │   │   ├── 📂 admin           # Admin panel services
+│   │   │   │   ├── users.ts       # Manage users
+│   │   │   │   ├── properties.ts  # Manage apartments/houses
+│   │   │   │   ├── payments.ts    # View transactions
+│   │   │   │   ├── reports.ts     # Generate reports
+│   │   │   ├── 📂 residents       # Resident-specific services
+│   │   │   │   ├── profile.ts     # Resident profile management
+│   │   │   │   ├── complaints.ts  # Submit complaints
+│   │   │   │   ├── payments.ts    # View payment status
+│   │   │   ├── 📂 security        # Security & visitor management
+│   │   │   │   ├── visitors.ts    # Log visitor entries
+│   │   │   │   ├── staff.ts       # Manage security personnel
+│   │   │   │   ├── incidents.ts   # Report security incidents
+│   │   │   ├── 📂 maintenance     # Maintenance & service requests
+│   │   │   │   ├── requests.ts    # Submit and track maintenance requests
+│   │   │   │   ├── vendors.ts     # Manage vendors
+│   │   │   ├── 📂 events          # Events & community announcements
+│   │   │   │   ├── create.ts      # Schedule events
+│   │   │   │   ├── list.ts        # Fetch event list
+│   │   │   │   ├── notices.ts     # Manage community notices
+│   │   │   ├── 📂 parking         # Parking & vehicle management
+│   │   │   │   ├── slots.ts       # Assign parking slots
+│   │   │   │   ├── vehicles.ts    # Manage registered vehicles
+│   ├── 📂 components              # Reusable UI components
+│   │   ├── Navbar.tsx
+│   │   ├── Sidebar.tsx
+│   │   ├── Footer.tsx
+│   ├── 📂 hooks                   # Custom React hooks
+│   │   ├── useAuth.ts
+│   │   ├── useFetch.ts
+│   ├── 📂 lib                     # Utilities & helpers
+│   │   ├── auth.ts                # JWT handling
+│   │   ├── db.ts                  # MongoDB connection
+│   │   ├── validate.ts            # Input validation functions
+│   ├── 📂 models                  # MongoDB schema models
+│   │   ├── User.ts
+│   │   ├── Property.ts
+│   │   ├── Complaint.ts
+│   │   ├── Payment.ts
+│   │   ├── Visitor.ts
+│   │   ├── Maintenance.ts
+│   │   ├── Event.ts
+│   │   ├── Parking.ts
+│   ├── 📂 services                # Business logic (separate from API)
+│   │   ├── authService.ts         # Handles authentication
+│   │   ├── userService.ts         # User management logic
+│   │   ├── propertyService.ts     # Handles property-related logic
+│   │   ├── complaintService.ts    # Handles complaints
+│   │   ├── maintenanceService.ts  # Handles maintenance logic
+│   │   ├── securityService.ts     # Handles security operations
+│   ├── 📂 styles                  # Tailwind and global styles
+│   ├── 📂 utils                    # Utility functions
+│   │   ├── dateFormat.ts
+│   │   ├── errorHandler.ts
+│   ├── 📂 middleware               # Middleware functions
+│   │   ├── authMiddleware.ts       # Protects routes
+│   │   ├── roleMiddleware.ts       # Checks user roles
+│   ├── 📂 pages                    # Page-based routing (if using pages router)
+│   ├── 📜 next.config.js            # Next.js config
+│   ├── 📜 tsconfig.json             # TypeScript config
+│   ├── 📜 package.json              # Dependencies
+│   ├── 📜 .env                      # Environment variables
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
