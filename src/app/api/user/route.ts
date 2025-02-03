@@ -1,0 +1,77 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import User from "@/models/User";
+import { NextRequest, NextResponse } from "next/server";
+import connect from "@/services/Config";
+import bcryptjs from "bcryptjs";
+
+connect()
+
+export const dynamic = 'force-dynamic'
+export async function POST(req: NextRequest) {
+    const data = await req.json();
+    try {
+        const { name, email, password, role, appartmentNo, phone } = data;
+
+        const userExisted = await User.findOne({ email: email }).select("-password");
+        console.log(userExisted);
+        if (userExisted) {
+            return NextResponse.json({ success: false, message: "user already exists" },{status:404});
+        }
+        const hashPassword = await bcryptjs.hash(password, 12);
+        const newlyAddedUser = User.create({ name, email, password: hashPassword, role, appartmentNo, phone });
+        if (!newlyAddedUser) {
+            return NextResponse.json({ success: false, message: "User Created Successfully" },{status:404});
+        } else {
+            return NextResponse.json({ success: true, message: "User Added Successfully" },{status:200});
+        }
+    } catch (e: any) {
+        console.log(e)
+        return NextResponse.json({ success: false, error: e.message })
+    }
+}
+
+export async function DELETE(req: NextRequest) {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    try {
+        if(!id){
+            return NextResponse.json({success:false,message:"id required to update"},{status:404})
+        }
+        const result=await User.findByIdAndDelete(id);
+        if(!result){
+            return NextResponse.json({success:false,message:"Unable to Delete User"},{status:404});
+        }
+        else{
+            return NextResponse.json({success:true,message:"User Deleted Successfully"},{status:200});
+        }
+    } catch (e: any) {
+        console.log(e)
+    }
+}
+
+
+export async function PUT(req: NextRequest) {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    try {
+        if(!id){
+            return NextResponse.json({success:false,message:"id required to update"},{status:404})
+        }
+        const data = await req.json();
+        
+        const filter = { _id:  id}; 
+        const update = { 
+            $set: data
+        };
+        const result = await User.updateOne(filter, update);
+        if(!result){
+            return NextResponse.json({success:false,message:"Unable to update the User ! try after sometime"},{status:404})
+        }
+        else{
+            return NextResponse.json({success:true,message:"User Updated Successfully"},{status:200})
+        }
+    } catch (e: any) {
+        console.log(e);
+    }
+}
