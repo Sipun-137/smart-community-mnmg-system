@@ -1,24 +1,38 @@
 "use client";
 import NavBar from "@/components/Navbar";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { GlobalContext } from "@/context";
+import { adminNavLinks, MaintenanceLinks, residentNavLinks, securityNavLinks } from "@/utils/lib";
+
+interface NavlinkType {
+  label: string;
+  url: string;
+}
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { setAuthUser, user,role } = useContext(GlobalContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [navLink, setNavLink] = useState<NavlinkType[]>([]);
   const router = useRouter();
-  const { setAuthUser, setUser } = useContext(GlobalContext);
-  const navlinks=[
-    {label:"Home",url:"/"},
-    {label:"About",url:"/about"},
-  ]
-
+  useEffect(() => {
+   if(role==="Admin"){
+    setNavLink(adminNavLinks);
+   }else if(role==="Resident"){
+    setNavLink(residentNavLinks);
+   }else if(role==="Security"){
+    setNavLink(securityNavLinks);
+   }else if(role==="Maintenance"){
+    setNavLink(MaintenanceLinks);
+   }
+  }, [user,role]);
+  // const navLink = adminNavLinks;
   return (
     <div className="flex flex-col h-screen">
       {/* Top Navbar */}
@@ -43,14 +57,15 @@ export default function DashboardLayout({
           </svg>
         </button>
         {/* change the name to show the name of the application at the top of the page */}
-        <h1 className="text-sm md:text-lg font-bold ">Smart Community Management System</h1>
+        <h1 className="text-sm md:text-lg font-bold ">
+          Smart Community Management System
+        </h1>
         <Button
           onClick={() => {
             setAuthUser(false);
-            setUser(null);
             localStorage.clear();
             Cookies.remove("token");
-            router.push("/auth/signin");
+            router.push("/auth/login");
           }}
         >
           {" "}
@@ -67,7 +82,7 @@ export default function DashboardLayout({
         >
           <div className="p-4">
             {/* <h2 className="text-lg font-bold"></h2> */}
-            <NavBar links={navlinks} />
+            <NavBar links={navLink} />
           </div>
         </aside>
 
