@@ -7,12 +7,16 @@ import connect from "@/services/Config";
 connect()
 export const dynamic = 'force-dynamic'
 
+interface decodedToken{
+    id:string,
+    email:string,
+    role:string
+}
+
 export async function POST(req: NextRequest) {
     const { email, password } = await req.json()
     try {
         const valid = await User.findOne({ email });
-        console.log(valid);
-        console.log("message:", valid)
         if (valid) {
             const isValidated = await bcryptjs.compare(password, valid.password)
             if (!isValidated) {
@@ -27,7 +31,6 @@ export async function POST(req: NextRequest) {
                 role: valid?.role
             }, process.env.JWT_SECRETKEY as string, { expiresIn: '1d' })
             const user = {
-
                 email: valid.email,
                 name: valid.name,
                 _id: valid.id,
@@ -54,5 +57,22 @@ export async function POST(req: NextRequest) {
             success: false,
             message: "error in login with the given credentials"
         })
+    }
+}
+
+export async function AuthUser(req: NextRequest) {
+    const token = req.headers.get("Authorization")?.split(" ")[1];
+    if (!token) {
+        return false
+    }
+    try {
+        const extractAuthUserinfo: decodedToken | null = jwt.decode(token) as decodedToken | null;
+        if (extractAuthUserinfo) {
+            // Return the decoded token if authentication is successful
+            return extractAuthUserinfo;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        console.log(error);
     }
 }
