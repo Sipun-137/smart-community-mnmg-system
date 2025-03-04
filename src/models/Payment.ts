@@ -5,6 +5,7 @@ const PaymentSchema = new mongoose.Schema({
   amount: Number,
   status: { type: String, enum: ["Pending", "Completed", "Failed"], default: "Pending" },
   paymentDate: Date,
+  modeOfPayment:{type:String,enum:["UPI","NetBanking","BankTransfer","Cash"]},
   invoiceUrl: String,
 },{ timestamps: true });
 
