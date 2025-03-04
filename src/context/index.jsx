@@ -7,13 +7,13 @@ export const GlobalContext = createContext();
 export default function GlobalState({children}) {
     const [isAuthUser, setAuthUser] = useState(null);
     const [user, setUser] = useState(null);
-    const [category, setCategory] = useState("");
+    const [role,setRole]=useState(null);
     const [stompClient, setStompClient] = useState(undefined);
-
     useEffect(() => {
         if (Cookies.get("token") !== undefined) {
             setAuthUser(true);
             const userData = JSON.parse(localStorage.getItem("user"));
+            setRole(userData.role);
             setUser(userData);
         } else {
             setAuthUser(false);
@@ -28,8 +28,8 @@ export default function GlobalState({children}) {
                 setAuthUser,
                 user,
                 setUser,
-                category, setCategory,
                 stompClient, setStompClient,
+                role,setRole
             }}
         >
             {children}
