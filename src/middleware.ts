@@ -15,10 +15,9 @@ export default function middleware(request: NextRequest) {
     if (!isPublicPath && !token) {
         return NextResponse.redirect(new URL('/auth/login', request.nextUrl));
     }
-
 }
 
 export const config = {
-    matcher: ['/', '/auth/login', "/dashboard/:path"]
+    matcher: ['/', '/auth/login', "/dashboard/:path*"]
 };
 
