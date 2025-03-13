@@ -2,12 +2,15 @@ import mongoose from "mongoose";
 
 const VisitorSchema = new mongoose.Schema({
   name: String,
+  residentId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  visitorId: String,
   phone: String,
   apartmentNo: String,
   visitReason: String,
-  entryTime: { type: Date, default: Date.now },
+  visitDate: { type: Date },
+  entryTime: { type: Date },
   exitTime: Date,
   qrCode: String,
-},{ timestamps: true });
+}, { timestamps: true });
 
 export default mongoose.models.Visitor || mongoose.model("Visitor", VisitorSchema);

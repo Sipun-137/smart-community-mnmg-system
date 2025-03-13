@@ -5,7 +5,12 @@ import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { GlobalContext } from "@/context";
-import { adminNavLinks, MaintenanceLinks, residentNavLinks, securityNavLinks } from "@/utils/lib";
+import {
+  adminNavLinks,
+  MaintenanceLinks,
+  residentNavLinks,
+  securityNavLinks,
+} from "@/utils/lib";
 
 interface NavlinkType {
   label: string;
@@ -17,21 +22,21 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { setAuthUser, user,role } = useContext(GlobalContext);
+  const { setAuthUser, user, role } = useContext(GlobalContext);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [navLink, setNavLink] = useState<NavlinkType[]>([]);
   const router = useRouter();
   useEffect(() => {
-   if(role==="Admin"){
-    setNavLink(adminNavLinks);
-   }else if(role==="Resident"){
-    setNavLink(residentNavLinks);
-   }else if(role==="Security"){
-    setNavLink(securityNavLinks);
-   }else if(role==="Maintenance"){
-    setNavLink(MaintenanceLinks);
-   }
-  }, [user,role]);
+    if (role === "Admin") {
+      setNavLink(adminNavLinks);
+    } else if (role === "Resident") {
+      setNavLink(residentNavLinks);
+    } else if (role === "Security") {
+      setNavLink(securityNavLinks);
+    } else if (role === "Maintenance") {
+      setNavLink(MaintenanceLinks);
+    }
+  }, [user, role]);
   // const navLink = adminNavLinks;
   return (
     <div className="flex flex-col h-screen">
@@ -60,6 +65,7 @@ export default function DashboardLayout({
         <h1 className="text-sm md:text-lg font-bold ">
           Smart Community Management System
         </h1>
+
         <Button
           onClick={() => {
             setAuthUser(false);

@@ -18,7 +18,6 @@ interface VisitorI {
   phone: string;
   visitDate: string;
   visitReason: string;
-  apartmentNo:string
 }
 
 export const Page = () => {
@@ -46,7 +45,6 @@ export const Page = () => {
                   <TableCell align="right">Phone</TableCell>
                   <TableCell align="right">Visit Date</TableCell>
                   <TableCell align="right">visitReason</TableCell>
-                  <TableCell align="right">Flat No.</TableCell>
                   <TableCell align="right">Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -64,12 +62,8 @@ export const Page = () => {
                       {new Date(row.visitDate).toLocaleDateString()}
                     </TableCell>
                     <TableCell align="right">{row.visitReason}</TableCell>
-                    <TableCell align="right">{row.apartmentNo}</TableCell>
                     <TableCell align="right">
-                      <Button 
-                      variant="outlined" 
-                      // href={`visitor/${row._id}`}
-                      >Show Details</Button>
+                      <Button variant="outlined" href={`visitor/${row._id}`}>Show Details</Button>
                     </TableCell>
                   </TableRow>
                 ))}

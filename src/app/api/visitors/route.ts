@@ -1,73 +1,57 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Visitor from "@/models/Visitor";
-import connect from "@/services/Config";
-import { NextResponse } from "next/server";
-import QRCode from "qrcode";
+import { NextRequest, NextResponse } from 'next/server';
+import QRCode from 'qrcode';
+import { AuthUser } from '../auth/route';
+import Visitor from '@/models/Visitor';
+import { v4 as uuidv4 } from 'uuid';
 
-connect();
-
-export interface VisitorInput {
-    name: string;
-    phone: string;
-    apartmentNo: string;
-    visitReason: string;
-}
-
-
-const generateQRCode = async (visitor: VisitorInput) => {
-    const qrData = JSON.stringify(visitor);
-    return await QRCode.toDataURL(qrData);
-};
-
-/**
- * POST: Register a new visitor 
- * the data should be {
- * name:"visitor name
- * phone number
- * appartment to visit
- * visitReason
- * entryTime
- * exitTIme
- * "
- * }
- */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
-        const data = await req.json();
-        const qrCode = await generateQRCode(data);
-        const newVisitor = new Visitor({
-            ...data,
-            qrCode,
-            entryTime: new Date(),
+        const user = await AuthUser(req);
+        if (!user) return NextResponse.json({ success: false, message: "Unauthorizes access" }, { status: 401 })
+
+        if (user?.role !== 'Resident') {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+        const { name, apartmentNo, visitDate, phone, visitReason } = await req.json();
+        const visitorId = uuidv4();;
+
+        const qrData = JSON.stringify({ visitorId, residentId: user.id, apartmentNo, phone, visitDate });
+        const qrCode = await QRCode.toDataURL(qrData);
+
+        const visitor = await Visitor.create({
+            visitorId,
+            residentId: user.id,
+            name,
+            phone,
+            apartmentNo,
+            visitReason,
+            visitDate,
+            qrCode
         });
-        return NextResponse.json({ sucess: true, newVisitor }, { status: 201 });
+        if (!visitor) {
+
+            return NextResponse.json({ success: false, message: "unable to register visitor" }, { status: 400 });
+        }
+        return NextResponse.json({ success: true, qrCode, visitorId }, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+        return NextResponse.json({ success: false, message: 'Error generating QR code', error: error.message }, { status: 500 });
     }
 }
 
-/**
- * Marks visitor check-out by setting the exit time
- * @param visitorId - Visitor's unique ID
- * @returns Checkout confirmation
- */
-/**
- * PATCH: Mark visitor check-out
- */
-export async function PATCH(req: Request) {
-    try {
-        const { visitorId } = await req.json();
-        const visitor = await Visitor.findById(visitorId);
-        if (!visitor || visitor.exitTime) throw new Error("Visitor not found or already checked out");
 
-        visitor.exitTime = new Date();
-        const res = await visitor.save();
-        if (!res) {
-            return NextResponse.json({ error: "Failed to update visitor" }, { status: 500 });
-        } else {
-            return NextResponse.json({ message: "Visitor checked out successfully", visitor });
+export async function GET(req: NextRequest) {
+    try {
+        const user = await AuthUser(req);
+        if (!user) return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
+        console.log(user.role)
+        if (user?.role === "Admin" || user?.role === "Security") {
+            const visitors = await Visitor.find();
+            return NextResponse.json({ success: true, visitors })
         }
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 400 });
+        const visitors=await Visitor.find({residentId:user.id});
+        return NextResponse.json({success:true,visitors})
+    } catch (e: any) {
+        return NextResponse.json({ sucess: false, message: "Service Error", error: e.message }, { status: 500 });
     }
 }
