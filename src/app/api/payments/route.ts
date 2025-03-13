@@ -1,106 +1,75 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import connect from "@/services/Config";
 import Payment from "@/models/Payment";
 import { AuthUser } from "../auth/route";
-import User from "@/models/User";
+import path from "path";
+import fs from "fs";
+import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
+export async function POST(req: NextRequest) {
+    try {
+        const user = await AuthUser(req);
+        if (!user) {
+            return NextResponse.json({ success: false, message: "Unauthorized Access" }, { status: 401 });
+        }
 
+        const formData = await req.formData();
+        const amount = Number(formData.get("amount"));
+        const modeOfPayment = formData.get("modeOfPayment") as string;
+        const file = formData.get("proof") as File;
 
-connect();
+        if (!amount || !modeOfPayment || !file) {
+            return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
+        }
+
+        // Validate amount
+        if (isNaN(amount) || amount <= 0) {
+            return NextResponse.json({ success: false, message: "Invalid amount" }, { status: 400 });
+        }
+
+        // Validate mode of payment
+        const validModes = ["UPI", "NetBanking", "BankTransfer", "Cash"];
+        if (!validModes.includes(modeOfPayment)) {
+            return NextResponse.json({ success: false, message: "Invalid mode of payment" }, { status: 400 });
+        }
+
+        // Store the proof image locally
+        const uploadsDir = path.join(process.cwd(), "public/uploads/payments");
+        if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+        const fileName = `${uuidv4()}-${file.name}`;
+        const filePath = path.join(uploadsDir, fileName);
+        const fileUrl = `/uploads/payments/${fileName}`;
+
+        const fileBuffer = Buffer.from(await file.arrayBuffer());
+        fs.writeFileSync(filePath, fileBuffer);
+
+        // Create a new payment record
+        const newPayment = new Payment({
+            userId: new mongoose.Types.ObjectId(user.id),
+            amount,
+            modeOfPayment,
+            proofUrl: fileUrl,
+            status: "Pending",
+        });
+
+        await newPayment.save();
+
+        return NextResponse.json({ success: true, payment: newPayment });
+    } catch (error) {
+        return NextResponse.json({ success: false, error: (error as Error).message }, { status: 500 });
+    }
+}
 
 export async function GET(req: NextRequest) {
+    const user = await AuthUser(req);
+
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     try {
-        const authuser = await AuthUser(req);
-        if (!authuser) {
-            return NextResponse.json({ success: false, message: "Unauthorized..!!!" })
-        }
-        const payments = await Payment.find({});
-        return NextResponse.json({ success: true, payments })
-    } catch (e: any) {
-        console.log(e);
+        const payments = await Payment.find({ userId: user.id });
+        return NextResponse.json({ payments });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
-
-
-export async function POST(req: NextRequest) {
-    const { amount, paymentDate, modeOfPayment, invoiceUrl } = await req.json();
-    try {
-        const authuser = await AuthUser(req);
-        if (!authuser) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "unauthorized access...!!!"
-                }
-            )
-        }
-        const user = await User.findOne({ email: authuser?.email });
-        if (!user) {
-            return NextResponse.json({ success: false, message: "User not found" })
-        }
-        const newpayment = await Payment.create({
-            userId: user._id,
-            amount: amount,
-            paymentDate,
-            modeOfPayment,
-            invoiceUrl
-        })
-        if (newpayment) {
-            return NextResponse.json({ success: true, message: "New payment added" })
-        } else {
-            return NextResponse.json({ success: false, message: "unable to add payment" })
-        }
-
-
-    } catch (e: any) {
-        console.log(e.message)
-        return NextResponse.json({ success: false, message: e.message })
-    }
-
-}
-
-
-export async function PUT(req: NextRequest) {
-    try {
-        const { searchParams } = new URL(req.url);
-        const id = searchParams.get('id');
-        const status = searchParams.get("status")
-
-        const authuser = await AuthUser(req);
-        if (!authuser) {
-            return NextResponse.json({
-                success: false,
-                message: "unauthorized access...!!!"
-            })
-
-        }
-        const user = await User.findOne({ email: authuser?.email });
-        if (!user) {
-            return NextResponse.json({ success: false, message: "User not found" })
-        }
-
-        if (!id || !status) {
-            return NextResponse.json({ success: false, message: "id and status are required" })
-        }
-        const payment = await Payment.findOne({ _id: id });
-        if (!payment) {
-            return NextResponse.json({ success: false, message: "Payment not found" })
-        }
-        const res = await Payment.updateOne({ _id: id }, { $set: { status: status } }, { new: true })
-        if (!res) {
-            return NextResponse.json({ success: false, message: "" })
-        }
-        else {
-            return NextResponse.json({ success: true, message: "successfully updated" });
-        }
-
-    } catch (e: any) {
-        console.log(e.message);
-        return NextResponse.json({ success: false, message: e.message });
-    }
-}
-
-
-
-
-
