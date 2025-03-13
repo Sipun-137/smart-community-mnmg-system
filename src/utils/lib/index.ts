@@ -48,8 +48,12 @@ export const adminNavLinks = [
 export const residentNavLinks = [
     {
         label: "dashboard",
-        url: "dashboard/resident"
+        url: "/dashboard/resident"
     },
+    {
+        label:"Visitors",
+        url:"/dashboard/resident/visitor"
+    }
 ];
 
 export const securityNavLinks = [
