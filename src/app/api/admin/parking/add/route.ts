@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         const slot = new ParkingSlot({ slotNumber, status: "AVAILABLE" });
         const response = await slot.save();
         if (response) {
-            return NextResponse.json({},{ status: 201 });
+            return NextResponse.json({success:true},{ status: 201 });
         } else {
             return NextResponse.json({ success: false, message: "Unable to create a Slot" }, { status: 400 })
         }

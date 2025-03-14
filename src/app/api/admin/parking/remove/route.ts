@@ -11,7 +11,8 @@ export async function DELETE(req: NextRequest) {
 
         if (user?.role !== "Admin") return NextResponse.json({ success: false, message: "unAuthorized Access" }, { status: 403 });
 
-        const { slotId } = await req.json();
+        const { searchParams } = new URL(req.url);
+        const slotId = searchParams.get('id');
         if (!slotId) return NextResponse.json({ success: false, message: "Slot ID required" }, { status: 400 });
 
         const result = await ParkingSlot.findByIdAndDelete(slotId);
