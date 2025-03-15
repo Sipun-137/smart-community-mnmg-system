@@ -12,7 +12,7 @@ export  async function GET(req: NextRequest) {
     if (!['Admin', 'Security'].includes(user?.role)) {
       return NextResponse.json({ message: "Forbidden", success: false }, { status: 403 });
     }
-    const slots = await ParkingSlot.find();
+    const slots = await ParkingSlot.find().populate("reservedBy","name");
     if (slots) {
       return NextResponse.json({ success: true, slots }, { status: 200 });
     } else {
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       const user = await AuthUser(req);
       if (!user) return;
       const { slotId, vehicleNumber } = await req.json();
-      if (!slotId || !vehicleNumber) return NextResponse.json({ success: false, message: "Missing fields" }, { status: 401 });
+      if (!slotId ) return NextResponse.json({ success: false, message: "Missing fields" }, { status: 401 });
 
       const slot = await ParkingSlot.findById(slotId);
       if (!slot || slot.status !== "AVAILABLE") return NextResponse.json({ message: "Slot Not Found ", success: false }, { status: 403 })

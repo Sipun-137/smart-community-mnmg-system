@@ -33,7 +33,7 @@ export async function GetAllSlots() {
 
 export async function ReserveASlot(formData: {
   slotId: string;
-  vehicleNumber: string;
+  vehicleNumber: string|null;
 }) {
   try {
     const response = await axios.post(`${base_url}/parking`, formData, {

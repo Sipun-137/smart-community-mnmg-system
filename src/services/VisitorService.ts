@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { base_url } from "@/utils/lib";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -11,17 +12,36 @@ export async function GetvisitorById(id: string) {
         });
         console.log(response)
         return response.data;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
         console.log(e);
     }
 }
 
+// get all visitor
 
-export async function getAllVisitorsByUser(){
-    const response=await axios.get(`${base_url}/visitors/`,{
-        headers:{
-             Authorization: `Bearer ${Cookies.get('token')}`
+export async function GetAllVisitor() {
+    try {
+
+    } catch (error: any) {
+        console.log(error);
+    }
+}
+
+
+export async function UpdateTime(formData:{entryTime:Date|null,exitTime:Date}){
+    try {
+        console.log(formData);
+    } catch (e:any) {
+        console.log(e);
+    }
+}
+// visitor update the entry time and update the exit time
+
+
+export async function getAllVisitorsByUser() {
+    const response = await axios.get(`${base_url}/visitors/`, {
+        headers: {
+            Authorization: `Bearer ${Cookies.get('token')}`
         }
     })
     return response.data
