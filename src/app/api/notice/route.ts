@@ -57,12 +57,12 @@ export async function PUT(req: NextRequest) {
         }
         if (authuser?.role !== "Admin") {
             return NextResponse.json({
-                sucess: false,
+                success: false,
                 message: "Admin Access Required"
             }, { status: 401 })
         }
         if (!id || !title || !description) {
-            return NextResponse.json({ message: "All fields are required" }, { status: 400 });
+            return NextResponse.json({ success:false,message: "All fields are required" }, { status: 400 });
         }
 
         const updatedNotice = await Notice.findByIdAndUpdate(
@@ -113,7 +113,7 @@ export async function DELETE(req: NextRequest) {
         }
         if (!id) {
             return NextResponse.json({
-                sucess: false,
+                success: false,
                 messag: "id Required"
             })
         }
@@ -132,6 +132,7 @@ export async function DELETE(req: NextRequest) {
     } catch (error: any) {
         console.log(error.message)
         return NextResponse.json({
+            success:false,
             message: error.message
         })
     }

@@ -24,7 +24,7 @@ export const GetAllNotice = async () => {
 
 export const AddNotice = async (formData: FormDataType) => {
     try {
-        const response = await axios.post(`${base_url}/api/notice`, formData, {
+        const response = await axios.post(`${base_url}/notice`, formData, {
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`
             }
@@ -37,7 +37,7 @@ export const AddNotice = async (formData: FormDataType) => {
 
 export const UpdateNotice = async (id: string, formData: FormDataType) => {
     try {
-        const response = await axios.put(`${base_url}/api/notice?id=${id}`, formData, {
+        const response = await axios.put(`${base_url}/notice?id=${id}`, formData, {
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`
             }
@@ -51,7 +51,7 @@ export const UpdateNotice = async (id: string, formData: FormDataType) => {
 
 export const DeleteNotice = async (id: string) => {
     try {
-        const response = await axios.delete(`${base_url}/api/notice?id=${id}`, {
+        const response = await axios.delete(`${base_url}/notice?id=${id}`, {
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`
             }
