@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
                 message: "Admin Access is Required"
             })
         }
-        const { name, email, password, role, appartmentNo, phone } = data;
+        const { name, email, password, role, apartmentNo, phone } = data;
 
         const userExisted = await User.findOne({ email: email }).select("-password");
         console.log(userExisted);
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: false, message: "user already exists" }, { status: 404 });
         }
         const hashPassword = await bcryptjs.hash(password, 12);
-        const newlyAddedUser = await User.create({ name, email, password: hashPassword, role, appartmentNo, phone });
+        const newlyAddedUser = await User.create({ name, email, password: hashPassword, role, apartmentNo, phone });
         if (!newlyAddedUser) {
             return NextResponse.json({ success: false, message: "User Created Successfully" }, { status: 404 });
         } else {
@@ -49,6 +49,19 @@ export async function DELETE(req: NextRequest) {
     const id = searchParams.get('id');
 
     try {
+        const auth = await AuthUser(req);
+        if (!auth) {
+            return NextResponse.json({
+                success: false,
+                mesage: "Unauthorized Access",
+            })
+        }
+        if (auth?.role !== "Admin") {
+            return NextResponse.json({
+                success: false,
+                message: "Admin Access is Required"
+            })
+        }
         if (!id) {
             return NextResponse.json({ success: false, message: "id required to update" }, { status: 404 })
         }
@@ -69,6 +82,19 @@ export async function PUT(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
     try {
+        const auth = await AuthUser(req);
+        if (!auth) {
+            return NextResponse.json({
+                success: false,
+                mesage: "Unauthorized Access",
+            })
+        }
+        if (auth?.role !== "Admin") {
+            return NextResponse.json({
+                success: false,
+                message: "Admin Access is Required"
+            })
+        }
         if (!id) {
             return NextResponse.json({ success: false, message: "id required to update" }, { status: 404 })
         }
@@ -87,5 +113,29 @@ export async function PUT(req: NextRequest) {
         }
     } catch (e: any) {
         console.log(e);
+    }
+}
+
+
+export async function GET(req: NextRequest) {
+    try {
+        const auth = await AuthUser(req);
+        if (!auth) {
+            return NextResponse.json({
+                success: false,
+                mesage: "Unauthorized Access",
+            })
+        }
+        if (auth?.role !== "Admin") {
+            return NextResponse.json({
+                success: false,
+                message: "Admin Access is Required"
+            })
+        }
+        const users = await User.find();
+        return NextResponse.json({ success: true, users });
+    } catch (e: any) {
+        console.log(e)
+        return NextResponse.json({ success: false, error: e.message })
     }
 }
