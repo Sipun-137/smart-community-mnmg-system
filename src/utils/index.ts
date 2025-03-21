@@ -17,10 +17,6 @@ export const adminNavLinks = [
         url: "/dashboard/admin/user"
     },
     {
-        label: "Complaints",
-        url: "/dashboard/admin/complaints"
-    },
-    {
         label: "Payments",
         url: "/dashboard/admin/payments"
     },
@@ -62,6 +58,10 @@ export const residentNavLinks = [
         label: "Parking",
         url: "/dashboard/resident/parking"
     }, 
+    {
+        label:"Services",
+        url:"/dashboard/resident/booking"
+    }
 ];
 
 export const securityNavLinks = [
@@ -75,12 +75,28 @@ export const securityNavLinks = [
     }
 ];
 
-export const MaintenanceLinks = [
+export const ProviderLinks = [
     {
         label: "dashboard",
-        url: "dashboard/maintainance"
-    },
+        url: "/dashboard/provider"
+    },{
+        label:"services",
+        url:"/dashboard/provider/service"
+    }
 ];
 
 export const communityname = "Falcon"
 export const base_url = "http://localhost:3000/api"
+
+export const categories = [
+  "All Categories",
+  "Home Services",
+  "Outdoor Services",
+  "Professional Services",
+  "Health & Wellness",
+  "Education",
+  "Technology",
+  "Events",
+  "Transportation",
+  "Other",
+];
