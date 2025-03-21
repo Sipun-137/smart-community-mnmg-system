@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { base_url } from "@/utils/lib";
+import { base_url } from "@/utils";
 import axios from "axios";
 import Cookies from "js-cookie";
 
