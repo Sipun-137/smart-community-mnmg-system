@@ -7,16 +7,17 @@ import connect from "@/services/Config";
 connect()
 export const dynamic = 'force-dynamic'
 
-interface decodedToken{
-    id:string,
-    email:string,
-    role:string
+interface decodedToken {
+    id: string,
+    email: string,
+    role: string
 }
 
 export async function POST(req: NextRequest) {
     const { email, password } = await req.json()
     try {
         const valid = await User.findOne({ email });
+        if (!valid) return NextResponse.json({ success: false, message: "Invalid Email" })
         if (valid) {
             const isValidated = await bcryptjs.compare(password, valid.password)
             if (!isValidated) {
@@ -35,7 +36,6 @@ export async function POST(req: NextRequest) {
                 name: valid.name,
                 _id: valid.id,
                 role: valid.role
-
             }
             console.log('login successful')
             return NextResponse.json({

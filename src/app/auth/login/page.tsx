@@ -2,12 +2,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/utils/lib/utils";
-import { communityname } from "@/utils/lib";
+import { communityname } from "@/utils";
 import { LoginUser } from "@/services/AuthService";
 import { useRouter } from "next/navigation";
 import { GlobalContext } from "@/context";
 import Cookies from "js-cookie";
+import { cn } from "@/lib/utils";
 
 export default function LoginFormDemo() {
   const { isAuthUser, setAuthUser,setRole,setUser } = useContext(GlobalContext);
@@ -43,10 +43,12 @@ export default function LoginFormDemo() {
   }, [isAuthUser]);
   return (
     <div className=" h-screen flex justify-center items-center">
-      <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input border border-white bg-white  dark:bg-black">
+      <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input border border-black bg-white  dark:bg-black ">
         <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 py-5">
           Welcome to {communityname} community
         </h2>
+        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+          
         <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
           Login to Access the Community Dashboard
         </p>

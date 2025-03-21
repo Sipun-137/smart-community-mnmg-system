@@ -7,10 +7,10 @@ import Cookies from "js-cookie";
 import { GlobalContext } from "@/context";
 import {
   adminNavLinks,
-  MaintenanceLinks,
+  ProviderLinks,
   residentNavLinks,
   securityNavLinks,
-} from "@/utils/lib";
+} from "@/utils";
 
 interface NavlinkType {
   label: string;
@@ -33,8 +33,8 @@ export default function DashboardLayout({
       setNavLink(residentNavLinks);
     } else if (role === "Security") {
       setNavLink(securityNavLinks);
-    } else if (role === "Maintenance") {
-      setNavLink(MaintenanceLinks);
+    } else if (role === "Provider") {
+      setNavLink(ProviderLinks);
     }
   }, [user, role]);
   // const navLink = adminNavLinks;
