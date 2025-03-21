@@ -32,7 +32,7 @@ type User = {
   name: string;
   email: string;
   password: string;
-  role: "Resident" | "Admin" | "Security" | "Maintenance";
+  role: "Resident" | "Admin" | "Security" | "Provider";
   apartmentNo: string;
   phone: string;
   createdAt: string;
@@ -261,7 +261,7 @@ export default function UserManagement() {
               <MenuItem value="Admin">Admin</MenuItem>
               <MenuItem value="Resident">Resident</MenuItem>
               <MenuItem value="Security">Security</MenuItem>
-              <MenuItem value="Maintenance">Maintenance</MenuItem>
+              <MenuItem value="Provider">Provider</MenuItem>
             </Select>
           </FormControl>
           <FormControl fullWidth sx={{ marginTop: 2 }}>
