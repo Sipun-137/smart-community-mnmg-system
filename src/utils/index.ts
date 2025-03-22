@@ -82,6 +82,9 @@ export const ProviderLinks = [
     },{
         label:"services",
         url:"/dashboard/provider/service"
+    },{
+        label:"Bookings",
+        url:"/dashboard/provider/bookings"
     }
 ];
 

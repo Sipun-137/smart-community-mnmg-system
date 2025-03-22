@@ -85,3 +85,32 @@ export async function DeleteAService(id: string) {
         return { success: false, message: "service Error", error: error.message }
     }
 }
+
+
+
+export async function GetMyAllBookings(){
+    try {
+        const response = await axios.get(`${base_url}/provider/booking`, {
+            headers: {
+                Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+        })
+        return response.data;
+    } catch (error: any) {
+        return { success: false, message: "service Error", error: error.message }
+    }
+}
+
+
+export async function UpdateStatus(id:string,status:{status:string}){
+    try {
+        const response = await axios.patch(`${base_url}/provider/booking?id=${id}`,status, {
+            headers: {
+                Authorization: `Bearer ${Cookies.get("token")}`,
+            },
+        })
+        return response.data;
+    } catch (error: any) {
+        return { success: false, message: "service Error", error: error.message }
+    }
+}

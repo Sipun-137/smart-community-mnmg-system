@@ -168,7 +168,6 @@ export default function ResidentServices() {
       toast.error("Please select a date and time slot for your booking.");
       return;
     }
-
     // Create new booking
     const newBooking = {
       serviceId: selectedService._id,
@@ -176,7 +175,6 @@ export default function ResidentServices() {
       timeSlot: bookingTimeSlot,
       notes: bookingNotes,
     };
-
     const response = await BookService(newBooking);
     if (response.success) {
       toast.success(
