@@ -61,6 +61,9 @@ export const residentNavLinks = [
     {
         label:"Services",
         url:"/dashboard/resident/booking"
+    },{
+        label:"Notices",
+        url:"/dashboard/notice"
     }
 ];
 
@@ -72,6 +75,9 @@ export const securityNavLinks = [
     {
         label:"Parking",
         url:"/dashboard/security/parking"
+    },{
+        label:"Notices",
+        url:"/dashboard/notice"
     }
 ];
 
@@ -85,6 +91,9 @@ export const ProviderLinks = [
     },{
         label:"Bookings",
         url:"/dashboard/provider/bookings"
+    },{
+        label:"Notices",
+        url:"/dashboard/notice"
     }
 ];
 

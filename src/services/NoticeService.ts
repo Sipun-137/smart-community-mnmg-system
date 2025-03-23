@@ -19,6 +19,7 @@ export const GetAllNotice = async () => {
 
     } catch (e: any) {
         console.log(e);
+        return {success:false,message:"Service Error"}
     }
 }
 
