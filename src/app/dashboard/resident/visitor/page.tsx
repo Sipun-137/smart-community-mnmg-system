@@ -19,8 +19,7 @@ interface VisitorI {
   visitDate: string;
   visitReason: string;
 }
-
-export const Page = () => {
+const Page = () => {
   const [myVisitor, setMyVisitor] = useState<VisitorI[]>([]);
   useEffect(() => {
     async function fetchData() {

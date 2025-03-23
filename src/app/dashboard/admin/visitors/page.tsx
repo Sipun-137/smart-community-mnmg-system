@@ -13,15 +13,15 @@ import {
 import React, { useEffect, useState } from "react";
 
 interface VisitorI {
-  _id:string,
+  _id: string;
   name: string;
   phone: string;
   visitDate: string;
   visitReason: string;
-  apartmentNo:string
+  apartmentNo: string;
 }
 
-export const Page = () => {
+export default function Page() {
   const [myVisitor, setMyVisitor] = useState<VisitorI[]>([]);
   useEffect(() => {
     async function fetchData() {
@@ -53,7 +53,7 @@ export const Page = () => {
               <TableBody>
                 {myVisitor.map((row) => (
                   <TableRow
-                    key={row.name}
+                    key={row._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -66,10 +66,12 @@ export const Page = () => {
                     <TableCell align="right">{row.visitReason}</TableCell>
                     <TableCell align="right">{row.apartmentNo}</TableCell>
                     <TableCell align="right">
-                      <Button 
-                      variant="outlined" 
-                      // href={`visitor/${row._id}`}
-                      >Show Details</Button>
+                      <Button
+                        variant="outlined"
+                        // href={`visitor/${row._id}`}
+                      >
+                        Show Details
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -80,6 +82,4 @@ export const Page = () => {
       </div>
     </div>
   );
-};
-
-export default Page;
+}

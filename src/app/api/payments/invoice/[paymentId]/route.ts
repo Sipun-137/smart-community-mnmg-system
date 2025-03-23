@@ -3,8 +3,8 @@ import puppeteer from "puppeteer";
 import fs from "fs";
 import path from "path";
 import Payment from "@/models/Payment";
-import { AuthUser } from "@/app/api/auth/route";
 import { communityname } from "@/utils";
+import { AuthUser } from "@/services/AuthService";
 
 
 // interface Params {

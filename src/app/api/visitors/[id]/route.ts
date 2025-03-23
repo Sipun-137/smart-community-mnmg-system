@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AuthUser } from "../../auth/route";
 import Visitor from "@/models/Visitor";
-
-
+import { AuthUser } from "@/services/AuthService";
 
 
 export async function GET(req: NextRequest, { params
@@ -24,6 +22,6 @@ export async function GET(req: NextRequest, { params
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
-        return NextResponse.json({ success: false, error: e.message ,message:"service error"}, { status: 500 });
+        return NextResponse.json({ success: false, error: e.message, message: "service error" }, { status: 500 });
     }
 }

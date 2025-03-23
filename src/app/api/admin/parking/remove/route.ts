@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AuthUser } from "@/app/api/auth/route";
 import ParkingSlot from "@/models/ParkingSlot";
+import { AuthUser } from "@/services/AuthService";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {

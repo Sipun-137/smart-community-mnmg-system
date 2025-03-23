@@ -2,7 +2,7 @@
 import connect from "@/services/Config"
 import { NextRequest, NextResponse } from "next/server";
 import Notice from "@/models/Notice";
-import { AuthUser } from "../auth/route";
+import { AuthUser } from "@/services/AuthService";
 connect();
 
 

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AuthUser } from "@/app/api/auth/route";
 import Booking from "@/models/Booking";
+import { AuthUser } from "@/services/AuthService";
 import { NextRequest, NextResponse } from "next/server";
 
 
 
 // provider update the status of the booking
-export async function PATCH(req: NextRequest, { params }: { params: { bookingId: string } }) {
+export async function PATCH(req: NextRequest, { params }:{ params:  Promise<{ bookingId: string } >}) {
     const user = await AuthUser(req);
 
     if (!user || user.role !== "Provider") {
@@ -19,8 +19,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { bookingId:
         if (!allowedStatuses.includes(status)) {
             return NextResponse.json({ success: false, message: "Invalid status update" }, { status: 400 });
         }
-
-        const booking = await Booking.findById(params.bookingId);
+        const {bookingId}=await params;
+        const booking = await Booking.findById(bookingId);
         if (!booking) {
             return NextResponse.json({ success: false, message: "Booking not found" }, { status: 404 });
         }

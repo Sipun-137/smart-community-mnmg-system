@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Service from "@/models/Service";
+import { AuthUser } from "@/services/AuthService";
 import { NextRequest, NextResponse } from "next/server";
-import { AuthUser } from "../auth/route";
 
 
 export async function GET(req: NextRequest) {

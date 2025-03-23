@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import { AuthUser } from "../../auth/route";
 import Service from "@/models/Service";
 import connect from "@/services/Config";
+import { AuthUser } from "@/services/AuthService";
 
 connect();
 

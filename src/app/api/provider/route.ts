@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AuthUser } from "../auth/route";
 import Service from "@/models/Service";
+import { AuthUser } from "@/services/AuthService";
 
 
 // 🏗 Provider Adds a New Service

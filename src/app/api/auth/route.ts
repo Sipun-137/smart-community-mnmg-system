@@ -7,11 +7,7 @@ import connect from "@/services/Config";
 connect()
 export const dynamic = 'force-dynamic'
 
-interface decodedToken {
-    id: string,
-    email: string,
-    role: string
-}
+
 
 export async function POST(req: NextRequest) {
     const { email, password } = await req.json()
@@ -60,19 +56,4 @@ export async function POST(req: NextRequest) {
     }
 }
 
-export async function AuthUser(req: NextRequest) {
-    const token = req.headers.get("Authorization")?.split(" ")[1];
-    if (!token) {
-        return false
-    }
-    try {
-        const extractAuthUserinfo: decodedToken | null = jwt.decode(token) as decodedToken | null;
-        if (extractAuthUserinfo) {
-            // Return the decoded token if authentication is successful
-            return extractAuthUserinfo;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-        console.log(error);
-    }
-}
+

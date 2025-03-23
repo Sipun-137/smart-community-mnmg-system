@@ -3,7 +3,7 @@ import User from "@/models/User";
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/services/Config";
 import bcryptjs from "bcryptjs";
-import { AuthUser } from "../auth/route";
+import { AuthUser } from "@/services/AuthService";
 
 connect()
 

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import Payment from "@/models/Payment";
-import { AuthUser } from "../auth/route";
 import path from "path";
 import fs from "fs";
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
+import { AuthUser } from "@/services/AuthService";
 export async function POST(req: NextRequest) {
     try {
         const user = await AuthUser(req);

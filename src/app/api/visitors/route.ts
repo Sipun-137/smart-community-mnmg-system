@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server';
 import QRCode from 'qrcode';
-import { AuthUser } from '../auth/route';
 import Visitor from '@/models/Visitor';
 import { v4 as uuidv4 } from 'uuid';
+import { AuthUser } from '@/services/AuthService';
 
 export async function POST(req: NextRequest) {
     try {
