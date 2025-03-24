@@ -132,7 +132,7 @@ export async function GET(req: NextRequest) {
                 message: "Admin Access is Required"
             })
         }
-        const users = await User.find();
+        const users = await User.find({}, '-password');
         return NextResponse.json({ success: true, users });
     } catch (e: any) {
         console.log(e)
