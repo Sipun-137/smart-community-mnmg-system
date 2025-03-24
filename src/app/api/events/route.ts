@@ -4,17 +4,7 @@ import Event from "@/models/Event";
 import { AuthUser } from "@/services/AuthService";
 import connect from "@/services/Config";
 
-export async function GET(req: NextRequest) {
-    await connect();
-    try {
-        const user = await AuthUser(req);
-        if (!user) return NextResponse.json({ success: false, message: "UnAuthorized" })
-        const events = await Event.find().populate("createdBy", "name email");
-        return NextResponse.json({ success: true, events }, { status: 200 });
-    } catch (error: any) {
-        return NextResponse.json({ success: false, message: "Internal Server Error", error: error.message }, { status: 500 });
-    }
-}
+
 
 
 export async function POST(req: NextRequest) {

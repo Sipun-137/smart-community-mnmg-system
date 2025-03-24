@@ -29,7 +29,7 @@ export async function CreateEvent(formData: EventType) {
 
 export async function GetAllEvent() {
     try {
-      const response = await axios.get(`${base_url}/events`, {
+      const response = await axios.get(`${base_url}/admin/event`, {
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
         },
