@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
         const amount = Number(formData.get("amount"));
         const modeOfPayment = formData.get("modeOfPayment") as string;
         const file = formData.get("proof") as File;
+        const bookingRef= formData.get("bookingRef") as string;
 
         if (!amount || !modeOfPayment || !file) {
             return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
         const newPayment = new Payment({
             userId: new mongoose.Types.ObjectId(user.id),
             amount,
+            bookingRef,
             modeOfPayment,
             proofUrl: fileUrl,
             status: "Pending",

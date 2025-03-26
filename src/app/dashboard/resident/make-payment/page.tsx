@@ -182,12 +182,6 @@ export default function MakePayment() {
           </form>
         </div>
       </div>
-      <div className="text-white text-center mt-4">
-        <hr />
-        <p className="m-2 font-bold font-sans uppercase">My Payments</p>
-        <hr />
-        <div></div>
-      </div>
     </>
   );
 }

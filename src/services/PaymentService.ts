@@ -44,15 +44,28 @@ export async function getMyPayments() {
 }
 
 
-export async function UpdatePayment(id:string,formdata:{status:string}){
+export async function UpdatePayment(id: string, formdata: { status: string }) {
   try {
-    const response = await axios.patch(`${base_url}/admin/payments?id=${id}`,formdata, {
+    const response = await axios.patch(`${base_url}/admin/payments?id=${id}`, formdata, {
       headers: {
         Authorization: `Bearer ${Cookies.get("token")}`,
       },
     });
     return response.data;
-  } catch (e:any) {
+  } catch (e: any) {
     console.log(e);
   }
 }
+
+export async function GetPendingPayments() {
+  try {
+    const response = await axios.get(`${base_url}/payments/pending`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+    });
+    return response.data;
+  } catch (e: any) {
+    console.log(e);
+  }
+} 

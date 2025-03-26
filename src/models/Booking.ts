@@ -8,7 +8,7 @@ export interface IBooking extends Document {
     date: Date;
     timeSlot: string;
     status: "pending" | "confirmed" | "completed" | "canceled";
-    paymentStatus: "pending" | "paid" | "failed";
+    paymentStatus: "pending" |"underReview"| "paid" | "failed";
     createdAt: Date;
     updatedAt: Date;
 }

@@ -171,7 +171,7 @@ export default function PaymentsAdmin() {
             {filteredPayments.map((payment) => (
               <TableRow key={payment._id}>
                 <TableCell>{payment.userId.name}</TableCell>
-                <TableCell>${payment.amount.toFixed(2)}</TableCell>
+                <TableCell>₹ {payment.amount.toFixed(2)}</TableCell>
                 <TableCell>
                   {format(payment.paymentDate, "MMM dd, yyyy")}
                 </TableCell>
