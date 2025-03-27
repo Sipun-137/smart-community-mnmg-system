@@ -118,14 +118,12 @@ export default function PaymentHistory() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    
+
     if (!selectedBookings) {
       return;
     }
 
-
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
-      
       toast.error("Please enter a valid amount");
       return;
     }
@@ -137,7 +135,6 @@ export default function PaymentHistory() {
 
     setError("");
     setIsSubmitting(true);
-
 
     const formData = new FormData();
     formData.append("bookingRef", selectedBookings._id);
@@ -158,8 +155,7 @@ export default function PaymentHistory() {
       setIsSubmitting(false);
       setPaymentDialogOpen(false);
       getMyAllPayments();
-    LoadPendingPayments();
-
+      LoadPendingPayments();
     }
   };
 
@@ -244,13 +240,6 @@ export default function PaymentHistory() {
                     </MenuItem>
                   ))}
                 </Select>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  href="/dashboard/resident/make-payment"
-                >
-                  Make New Payment
-                </Button>
               </div>
 
               <TableContainer component={Paper}>

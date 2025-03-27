@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { GlobalContext } from "@/context";
 import Cookies from "js-cookie";
 import { cn } from "@/lib/utils";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginFormDemo() {
   const { isAuthUser, setAuthUser,setRole,setUser } = useContext(GlobalContext);
@@ -23,6 +24,7 @@ export default function LoginFormDemo() {
     const res = await LoginUser(formData);
     console.log(res);
     if (res.success) {
+      toast.success(res.message);
       console.log("Login Success");
       setFormdata({ email: "", password: "" });
       setAuthUser(true);
@@ -32,6 +34,7 @@ export default function LoginFormDemo() {
       localStorage.setItem("user", JSON.stringify(res.user));
       router.push("/dashboard");
     } else {
+      toast.error(res.message);
       setFormdata({ email: "", password: "" });
     }
   };
@@ -43,6 +46,7 @@ export default function LoginFormDemo() {
   }, [isAuthUser]);
   return (
     <div className=" h-screen flex justify-center items-center">
+      <Toaster position="bottom-right"/>
       <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input border border-black bg-white  dark:bg-black ">
         <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200 py-5">
           Welcome to {communityname} community

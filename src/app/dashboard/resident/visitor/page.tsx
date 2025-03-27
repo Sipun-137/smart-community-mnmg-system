@@ -1,78 +1,32 @@
-"use client";
-import { getAllVisitorsByUser } from "@/services/VisitorService";
-import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Button,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { PlusCircle } from "lucide-react";
 
-interface VisitorI {
-  _id:string,
-  name: string;
-  phone: string;
-  visitDate: string;
-  visitReason: string;
-}
-const Page = () => {
-  const [myVisitor, setMyVisitor] = useState<VisitorI[]>([]);
-  useEffect(() => {
-    async function fetchData() {
-      const response = await getAllVisitorsByUser();
-      setMyVisitor(response.visitors);
-    }
-    fetchData();
-  }, []);
+import { Button } from "@/components/ui/button";
+import { VisitorsList } from "@/components/visitors-list";
+
+export default function ResidentDashboardPage() {
   return (
-    <div className="p-4 m-2 flex justify-center items-center flex-col">
-      <div>
-        <p className="p-1 font-sans text-lg uppercase font-bold">my Visitors</p>
-      </div>
-      <hr className="border border-white w-full" />
-      <div className="w-full mt-6">
-        {myVisitor.length > 0 ? (
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell align="right">Phone</TableCell>
-                  <TableCell align="right">Visit Date</TableCell>
-                  <TableCell align="right">visitReason</TableCell>
-                  <TableCell align="right">Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {myVisitor.map((row) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.phone}</TableCell>
-                    <TableCell align="right">
-                      {new Date(row.visitDate).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell align="right">{row.visitReason}</TableCell>
-                    <TableCell align="right">
-                      <Button variant="outlined" href={`visitor/${row._id}`}>Show Details</Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        ) : null}
+    <div className="container py-10">
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Visitor Management
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Manage and track all your visitors in one place
+            </p>
+          </div>
+          <Button asChild>
+            <Link href="visitor/new">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add New Visitor
+            </Link>
+          </Button>
+        </div>
+
+        <VisitorsList />
       </div>
     </div>
   );
-};
-
-export default Page;
+}

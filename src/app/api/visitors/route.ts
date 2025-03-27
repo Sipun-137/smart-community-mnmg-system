@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
         }
         return NextResponse.json({ success: true, qrCode, visitorId }, { status: 200 });
     } catch (error: any) {
+        console.log(error.message)
         return NextResponse.json({ success: false, message: 'Error generating QR code', error: error.message }, { status: 500 });
     }
 }
@@ -46,7 +47,7 @@ export async function GET(req: NextRequest) {
         if (!user) return NextResponse.json({ success: false, message: "Forbidden" }, { status: 403 });
         console.log(user.role)
         if (user?.role === "Admin" || user?.role === "Security") {
-            const visitors = await Visitor.find();
+            const visitors = await Visitor.find().populate("residentId");
             return NextResponse.json({ success: true, visitors })
         }
         const visitors=await Visitor.find({residentId:user.id});

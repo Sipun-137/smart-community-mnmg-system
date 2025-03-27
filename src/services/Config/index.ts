@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+//mongodb+srv://developersipun:testSipun345@cluster1.xm25lga.mongodb.net/
+
 export default async function connect() {
     try {
         mongoose.connect("mongodb://127.0.0.1:27017/scmsDB"!);

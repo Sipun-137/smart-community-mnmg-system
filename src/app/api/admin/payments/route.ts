@@ -41,14 +41,11 @@ export async function PATCH(req: NextRequest) {
     try {
         const payment = await Payment.findByIdAndUpdate(id, { status }, { new: true });
         if (payment && payment.status === "Verified") {
-            console.log(payment);
-            const res = await Booking.findByIdAndUpdate(payment.bookingRef, {paymentStatus:"paid", status: "confirmed" }, { new: true })
-            console.log(res);
+            await Booking.findByIdAndUpdate(payment.bookingRef, { paymentStatus: "paid", status: "confirmed" }, { new: true })
             return NextResponse.json({ success: true, message: "Payment Updated" });
         }
         else if (payment && payment.status === "Rejected") {
-            const res = await Booking.findByIdAndUpdate(payment.bookingRef, {paymentStatus:"failed", status: "canceled" }, { new: true })
-            console.log(res);
+            await Booking.findByIdAndUpdate(payment.bookingRef, { paymentStatus: "failed", status: "canceled" }, { new: true })
             return NextResponse.json({ success: true, message: "Payment Updated" });
         }
         else {

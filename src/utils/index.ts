@@ -1,10 +1,3 @@
-/* 
-    nav links 
-    {
-        label:"name".
-        url:"/link"
-    }
-*/
 
 
 export const adminNavLinks = [
@@ -83,7 +76,10 @@ export const securityNavLinks = [
     }, {
         label: "Notices",
         url: "/dashboard/notice"
-    }
+    },{
+        label: "Visitors",
+        url: "/dashboard/security/visitor"
+    },
 ];
 
 export const ProviderLinks = [

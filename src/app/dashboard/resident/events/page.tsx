@@ -26,13 +26,14 @@ import {
   UnregisterEvent,
 } from "@/services/EventService";
 import toast, { Toaster } from "react-hot-toast";
+import { getUserId } from "@/services/AuthService";
 
 // Current user ID (simulating logged-in user)
-const CURRENT_USER_ID = "67a14ab3be2b36216eaec7f3"; // John Doe
 
 export default function ResidentEventsPage() {
   const [myEvents, setMyEvents] = useState([]);
   const [publicEvents, setPublicEvents] = useState([]);
+  const [CURRENT_USER_ID,setCurrentUserId]=useState<string|null>(null);
 
   const LoadPublicUpcomingEvents = async () => {
     const response = await GetPublicUpcomingEvents();
@@ -74,7 +75,17 @@ export default function ResidentEventsPage() {
     }
   };
 
+
+  const getMyId=async()=>{
+    // TODO: Implement logic to fetch current user's ID
+    const response = await getUserId();
+    if (response) {
+      setCurrentUserId(response);
+    }
+  }
+  
   useEffect(() => {
+    getMyId();
     LoadPublicUpcomingEvents();
     loadAssignedEvents();
   }, []);
