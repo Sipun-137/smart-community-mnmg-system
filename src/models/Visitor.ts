@@ -11,7 +11,7 @@ const VisitorSchema = new mongoose.Schema({
   entryTime: { type: Date },
   exitTime: Date,
   qrCode: String,
-  status: { type: String, enum: ["pending", "approved", "completed", "rejected"], default: "pending" }
+  status: { type: String, enum: ["pending", "approved", "completed", "rejected", "active"], default: "pending" }
 }, { timestamps: true });
 
 export default mongoose.models.Visitor || mongoose.model("Visitor", VisitorSchema);

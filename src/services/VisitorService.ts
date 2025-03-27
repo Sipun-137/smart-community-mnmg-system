@@ -108,3 +108,34 @@ export async function UpdateStatus(id: string, status: string) {
         return { success: false, message: e.message }
     }
 }
+
+
+
+export async function updateEntrytime(id:string) {
+    try {
+        const response = await axios.patch(`${base_url}/visitors/time/${id}`,{status:"active"}, {
+            headers: {
+                Authorization: `Bearer ${Cookies.get('token')}`
+            }
+        });
+        console.log(response)
+        return response.data;
+    } catch (e: any) {
+        return { success: false, message: e.message }
+    }
+}
+
+
+export async function updateExitTime(id:string){
+    try {
+        const response = await axios.put(`${base_url}/visitors/time/${id}`,{}, {
+            headers: {
+                Authorization: `Bearer ${Cookies.get('token')}`
+            }
+        });
+        console.log(response)
+        return response.data;
+    } catch (e: any) {
+        return { success: false, message: e.message }
+    }
+}
