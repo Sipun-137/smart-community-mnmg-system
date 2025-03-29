@@ -14,7 +14,7 @@ export async function PATCH(req: NextRequest, { params
 }) {
     try {
         const user = await AuthUser(req);
-        if (!user || (user.role !== "Admin" || "Security")) {
+        if (!user || !["Admin", "Security"].includes(user.role)) {
             return NextResponse.json({ success: false, message: "Forbidden" }, { status: 401 })
         }
         const { id } = await params;
