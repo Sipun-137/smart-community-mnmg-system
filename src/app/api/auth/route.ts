@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import User from "@/models/User";
 import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from 'jsonwebtoken'
 import connect from "@/services/Config";
+import { AuthUser } from "@/services/AuthService";
 
 connect()
 export const dynamic = 'force-dynamic'
@@ -46,7 +48,6 @@ export async function POST(req: NextRequest) {
             success: false,
             message: "error in login with the given credentials"
         })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.log(error);
         return NextResponse.json({
@@ -57,3 +58,28 @@ export async function POST(req: NextRequest) {
 }
 
 
+export async function GET(req: NextRequest,) {
+
+    try {
+        const user = await AuthUser(req);
+        if (!user) return NextResponse.json({
+            success: false,
+            message: "Unauthorized Access",
+        }, {
+            status: 401
+        })
+        const extractAuthUserinfo=await User.findOne({_id:user.id}).select("-password");
+        return NextResponse.json({
+            success: true,
+            message: "User Authenticated Successfully",
+            extractAuthUserinfo
+        })
+    } catch (error:any) {
+        return NextResponse.json({
+            success: false,
+            message: "Unauthorized Access",
+            error:error.message
+        })
+    }
+
+}

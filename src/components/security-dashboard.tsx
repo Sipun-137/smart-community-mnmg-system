@@ -69,91 +69,6 @@ interface VisitorI {
   exitTime: Date | null;
 }
 
-// Sample data - in a real app, this would come from your API/database
-// const sampleVisitors = [
-//   {
-//     id: "67d268fbdb384a4dda063dae",
-//     name: "Ashutosh Biswal",
-//     residentId: "67a14ab3be2b36216eaec7f3",
-//     residentName: "John Smith",
-//     residentApartment: "B-24",
-//     visitorId: "b45343bd-ffe4-4ac9-a8f8-f8ffa6438811",
-//     phone: "8547962385",
-//     apartmentNo: "B-24",
-//     visitReason: "for visiting the friend",
-//     visitDate: "2025-03-20T13:00:00.001Z",
-//     status: "approved",
-//     entryTime: null,
-//     exitTime: null,
-//     qrCode: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA...",
-//   },
-//   {
-//     id: "67d268fbdb384a4dda063db0",
-//     name: "Rahul Sharma",
-//     residentId: "67a14ab3be2b36216eaec7f4",
-//     residentName: "Emily Johnson",
-//     residentApartment: "C-12",
-//     visitorId: "d45343bd-ffe4-4ac9-a8f8-f8ffa6438813",
-//     phone: "9876543210",
-//     apartmentNo: "C-12",
-//     visitReason: "for maintenance work",
-//     visitDate: "2025-03-25T10:30:00.000Z",
-//     status: "approved",
-//     entryTime: null,
-//     exitTime: null,
-//     qrCode: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA...",
-//   },
-//   {
-//     id: "67d268fbdb384a4dda063db3",
-//     name: "Neha Gupta",
-//     residentId: "67a14ab3be2b36216eaec7f7",
-//     residentName: "David Lee",
-//     residentApartment: "B-10",
-//     visitorId: "g45343bd-ffe4-4ac9-a8f8-f8ffa6438816",
-//     phone: "8527419630",
-//     apartmentNo: "B-10",
-//     visitReason: "for business meeting",
-//     visitDate: "2025-03-22T09:00:00.000Z",
-//     status: "approved",
-//     entryTime: null,
-//     exitTime: null,
-//     qrCode: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA...",
-//   },
-//   {
-//     id: "67d268fbdb384a4dda063daf",
-//     name: "Sipun Kumar",
-//     residentId: "67a14ab3be2b36216eaec7f3",
-//     residentName: "John Smith",
-//     residentApartment: "B-24",
-//     visitorId: "c45343bd-ffe4-4ac9-a8f8-f8ffa6438812",
-//     phone: "8547962345",
-//     apartmentNo: "B-24",
-//     visitReason: "for visiting the aunt",
-//     visitDate: "2025-03-13T05:11:23.339Z",
-//     status: "active",
-//     entryTime: "2025-03-13T05:30:00.000Z",
-//     exitTime: null,
-//     qrCode: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA...",
-//   },
-//   {
-//     id: "67d268fbdb384a4dda063db4",
-//     name: "Vikram Malhotra",
-//     residentId: "67a14ab3be2b36216eaec7f8",
-//     residentName: "Jennifer Taylor",
-//     residentApartment: "E-07",
-//     visitorId: "h45343bd-ffe4-4ac9-a8f8-f8ffa6438817",
-//     phone: "7539514682",
-//     apartmentNo: "E-07",
-//     visitReason: "for plumbing repair",
-//     visitDate: "2025-03-15T11:30:00.000Z",
-//     status: "active",
-//     entryTime: "2025-03-15T11:35:00.000Z",
-//     exitTime: null,
-//     qrCode: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA...",
-//   },
-// ];
-
-// Status badge variants
 const getStatusBadge = (status: string) => {
   switch (status) {
     case "approved":
@@ -248,12 +163,6 @@ export function SecurityDashboard() {
 
   const handleScanQrCode = () => {
     setShowQrScanner(true);
-    // In a real app, this would activate the camera for QR scanning
-
-    // Simulate a successful scan after 2 seconds
-    // setTimeout(() => {
-    // setShowQrScanner(false);
-    // }, 2000);
   };
 
   const handleDenyEntry = async (id: string) => {
@@ -270,6 +179,15 @@ export function SecurityDashboard() {
     const response = await GetAllVisitor();
     if (response.success) {
       setVisitor(response.visitors);
+    }
+  };
+
+  const handleShowQr = (id: string) => {
+    const visitor = filteredVisitors.find((v) => v._id === id);
+    if (visitor) {
+      const qrData = JSON.stringify({ visitorId: visitor.visitorId });
+      setScanResult(qrData);
+      setScannedVisitorId(visitor.visitorId);
     }
   };
 
@@ -307,12 +225,12 @@ export function SecurityDashboard() {
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="flex h-64 items-center justify-center rounded-md border border-dashed">
+              <div className="flex h-auto items-center justify-center rounded-md border border-dashed">
                 <div className="text-center">
                   <div className="animate-pulse text-muted-foreground">
                     <div className="flex flex-col items-center gap-4 p-4">
                       <h2 className="text-lg font-semibold">
-                        Custom QR Scanner
+                        QR Scanner
                       </h2>
 
                       {/* Camera QR Scanner */}
@@ -617,7 +535,9 @@ export function SecurityDashboard() {
                             </DropdownMenuItem>
                           )}
 
-                          <DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleShowQr(visitor._id)}
+                          >
                             <QrCode className="mr-2 h-4 w-4" />
                             View QR Code
                           </DropdownMenuItem>
@@ -640,6 +560,92 @@ export function SecurityDashboard() {
           </Table>
         </CardContent>
       </Card>
+      <Dialog open={!!scannedVisitorId} onOpenChange={() => {setScannedVisitorId(null);setScanResult(null);}}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Visitor Information</DialogTitle>
+            <DialogDescription>
+              Details of the scanned visitor.
+            </DialogDescription>
+          </DialogHeader>
+
+          {(() => {
+            const scanvisitor = visitor.find(
+              (v) => v.visitorId === scannedVisitorId
+            );
+            if (!scanvisitor) return <div>Visitor not found</div>;
+
+            return (
+              <div className="space-y-4">
+                <div className="grid gap-2">
+                  <div className="font-semibold text-lg">
+                    {scanvisitor.name}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {scanvisitor.phone}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="text-muted-foreground">Resident:</div>
+                  <div>{scanvisitor.residentId.name}</div>
+
+                  <div className="text-muted-foreground">Apartment:</div>
+                  <div>{scanvisitor.apartmentNo}</div>
+
+                  <div className="text-muted-foreground">Visit Date:</div>
+                  <div>{format(new Date(scanvisitor.visitDate), "PPP p")}</div>
+
+                  <div className="text-muted-foreground">Reason:</div>
+                  <div>{scanvisitor.visitReason}</div>
+
+                  <div className="text-muted-foreground">Status:</div>
+                  <div>{getStatusBadge(scanvisitor.status)}</div>
+                </div>
+
+                <DialogFooter className="gap-2 sm:gap-0">
+                  {scanvisitor.status === "approved" && (
+                    <>
+                      <Button
+                        variant="outline"
+                        className="text-red-500 border-red-500 hover:bg-red-50"
+                        onClick={() => {
+                          handleDenyEntry(scanvisitor._id);
+                          setScannedVisitorId(null);
+                        }}
+                      >
+                        <UserX className="mr-2 h-4 w-4" />
+                        Deny Entry
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          handleRecordEntry(scanvisitor._id);
+                          setScannedVisitorId(null);
+                        }}
+                      >
+                        <DoorOpen className="mr-2 h-4 w-4" />
+                        Record Entry
+                      </Button>
+                    </>
+                  )}
+
+                  {scanvisitor.status === "active" && (
+                    <Button
+                      onClick={() => {
+                        handleRecordExit(scanvisitor._id);
+                        setScannedVisitorId(null);
+                      }}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Record Exit
+                    </Button>
+                  )}
+                </DialogFooter>
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

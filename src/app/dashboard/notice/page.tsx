@@ -1,28 +1,43 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client"
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GetAllNotice } from "@/services/NoticeService";
 import { formatDistanceToNow } from "date-fns";
 
-async function getNotices() {
-  //   Example API call:
-  const res = await GetAllNotice();
-  console.log(res);
-  if (res.success) {
-    return res.data;
-  } else {
-    return [];
-  }
-}
+export default function NoticesPage() {
+  const [notices, setNotices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function NoticesPage() {
-  const notices = await getNotices();
-  console.log(notices);
+  useEffect(() => {
+    async function fetchNotices() {
+      try {
+        const res = await GetAllNotice();
+        if (res.success) {
+          setNotices(res.data);
+        } else {
+          setNotices([]);
+        }
+      } catch (error) {
+        console.error("Error fetching notices:", error);
+        setNotices([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchNotices();
+  }, []);
+
   return (
     <div className="container mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-8">Notices</h1>
 
-      {notices.length === 0 ? (
+      {loading ? (
+        <p className="text-muted-foreground">Loading notices...</p>
+      ) : notices.length === 0 ? (
         <p className="text-muted-foreground">
           No notices available at this time.
         </p>

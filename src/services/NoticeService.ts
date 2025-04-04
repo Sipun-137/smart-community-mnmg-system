@@ -16,7 +16,6 @@ export const GetAllNotice = async () => {
             }
         })
         return response.data;
-
     } catch (e: any) {
         console.log(e);
         return {success:false,message:"Service Error"}
@@ -32,7 +31,8 @@ export const AddNotice = async (formData: FormDataType) => {
         });
         return response.data;
     } catch (e: any) {
-        console.log(e)
+        console.log(e);
+        return {success:false,message:"Service Error"};
     }
 }
 
@@ -46,6 +46,7 @@ export const UpdateNotice = async (id: string, formData: FormDataType) => {
         return response.data;
     } catch (e: any) {
         console.log(e)
+        return {success:false,message:"Service Error"}
     }
 }
 
@@ -60,6 +61,7 @@ export const DeleteNotice = async (id: string) => {
         return response.data;
     } catch (e: any) {
         console.log(e)
+        return {success:false,message:"Service Error"}
     }
 }
 

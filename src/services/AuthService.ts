@@ -33,7 +33,6 @@ export async function AuthUser(req: NextRequest) {
             // Return the decoded token if authentication is successful
             return extractAuthUserinfo;
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.log(error);
         return false;
@@ -42,7 +41,7 @@ export async function AuthUser(req: NextRequest) {
 
 
 
-export async function getUserId(){
+export async function getUserId() {
     try {
         const token = Cookies.get('token') as string;
         const extractAuthUserinfo: decodedToken | null = jwt.decode(token) as decodedToken | null;
@@ -50,9 +49,41 @@ export async function getUserId(){
             // Return the decoded token if authentication is successful
             return extractAuthUserinfo.id;
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.log(error);
-        return false;
+        return { success: false, message: "Service Error", error: error.message }
+    }
+}
+
+
+export async function getProfileDetails() {
+    const token = Cookies.get('token') as string;
+    try {
+        const result = await axios.get(`${base_url}/auth`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return result.data;
+    } catch (error: any) {
+        console.log(error);
+        return { success: false, message: "Service Error", error: error.message }
+    }
+}
+
+
+
+export async function UpdatePassword(newPassword:string,oldPassword:string){
+    try {
+        const token = Cookies.get('token') as string;
+        const result = await axios.patch(`${base_url}/user`, { newPassword, oldPassword }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return result.data;
+    } catch (error:any) {
+        console.log(error);
+        return { success: false, message: error.message, error: error.message }
     }
 }

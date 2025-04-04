@@ -139,3 +139,45 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ success: false, error: e.message })
     }
 }
+
+
+
+export async function PATCH(req: NextRequest) {
+    try {
+        const auth = await AuthUser(req);
+        if (!auth) {
+            return NextResponse.json({
+                success: false,
+                mesage: "Unauthorized Access",
+            }, { status: 401 })
+        }
+        const { newPassword,oldPassword } = await req.json();
+        if (!newPassword || !oldPassword) {
+            return NextResponse.json({ success: false, message: "New Password and Old Password are required" }, { status: 404 })
+        }
+        const user = await User.findById(auth.id);
+        if (!user) {
+            return NextResponse.json({ success: false, message: "User not found" }, { status: 404 })
+        }
+        const isMatch = await bcryptjs.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return NextResponse.json({ success: false, message: "Old Password is incorrect" }, { status: 404 })
+        }
+        const hashPassword = await bcryptjs.hash(newPassword, 12);
+        const newHasedPassword = hashPassword;
+        if (newHasedPassword === user.password) {
+            return NextResponse.json({ success: false, message: "New Password cannot be the same as Old Password" }, { status: 404 })
+        }
+           
+        const result = await User.findByIdAndUpdate(auth.id, { password: newHasedPassword }, { new: true });
+        if (result) {
+            return NextResponse.json({ success: true, message: "Password Updated Successfully" }, { status: 200 })
+        } else {
+            return NextResponse.json({ success: false, message: "Unable to update the password" }, { status: 404 })
+        }
+
+    } catch (e: any) {
+        console.log(e);
+        return NextResponse.json({ success: false, error: e.message, message: e.message },{status:500})
+    }
+}

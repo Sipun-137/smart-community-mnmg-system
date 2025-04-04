@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 export default async function connect() {
     try {
-        mongoose.connect("mongodb://127.0.0.1:27017/scmsDB"!);
+        mongoose.connect(process.env.MONGODB_URI as string);
         const connection = mongoose.connection;
 
         connection.on('connected', () => {

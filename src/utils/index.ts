@@ -33,6 +33,10 @@ export const adminNavLinks = [
     {
         label: "Parking",
         url: "/dashboard/admin/parking"
+    },
+    {
+        label:"Profile",
+        url:"/dashboard/profile"
     }
 ];
 export const residentNavLinks = [
@@ -62,6 +66,9 @@ export const residentNavLinks = [
     {
         label: "Notices",
         url: "/dashboard/notice"
+    },{
+        label:"Profile",
+        url:"/dashboard/profile"
     }
 ];
 
@@ -80,6 +87,10 @@ export const securityNavLinks = [
         label: "Visitors",
         url: "/dashboard/security/visitor"
     },
+    {
+        label:"Profile",
+        url:"/dashboard/profile"
+    }
 ];
 
 export const ProviderLinks = [
@@ -95,6 +106,10 @@ export const ProviderLinks = [
     }, {
         label: "Notices",
         url: "/dashboard/notice"
+    },
+    {
+        label:"Profile",
+        url:"/dashboard/profile"
     }
 ];
 
