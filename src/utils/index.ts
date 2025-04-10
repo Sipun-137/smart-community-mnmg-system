@@ -3,7 +3,7 @@
 export const adminNavLinks = [
     {
         label: "dashboard",
-        url: "/dashboard/admin"
+        url: "/dashboard"
     },
     {
         label: "Users",
@@ -26,11 +26,6 @@ export const adminNavLinks = [
         url: "/dashboard/admin/events"
     },
     {
-        label: "security-alerts",
-        url: "/dashboard/admin/security-alerts"
-    }
-    ,
-    {
         label: "Parking",
         url: "/dashboard/admin/parking"
     },
@@ -42,7 +37,7 @@ export const adminNavLinks = [
 export const residentNavLinks = [
     {
         label: "dashboard",
-        url: "/dashboard/resident"
+        url: "/dashboard"
     },
     {
         label: "Payment",
@@ -75,7 +70,7 @@ export const residentNavLinks = [
 export const securityNavLinks = [
     {
         label: "dashboard",
-        url: "/dashboard/security"
+        url: "/dashboard"
     },
     {
         label: "Parking",
@@ -96,7 +91,7 @@ export const securityNavLinks = [
 export const ProviderLinks = [
     {
         label: "dashboard",
-        url: "/dashboard/provider"
+        url: "/dashboard"
     }, {
         label: "services",
         url: "/dashboard/provider/service"

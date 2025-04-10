@@ -47,7 +47,9 @@ export async function getUserId() {
         const extractAuthUserinfo: decodedToken | null = jwt.decode(token) as decodedToken | null;
         if (extractAuthUserinfo) {
             // Return the decoded token if authentication is successful
-            return extractAuthUserinfo.id;
+            return {success:true,id:extractAuthUserinfo.id};
+        }else {
+            return {success:false,message:"Invalid Token"};
         }
     } catch (error: any) {
         console.log(error);

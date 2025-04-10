@@ -25,6 +25,7 @@ import { Visibility } from "@mui/icons-material";
 import { format } from "date-fns";
 import Image from "next/image";
 import {
+  GenerateInvoice,
   getMyPayments,
   GetPendingPayments,
   MakeAPayment,
@@ -41,6 +42,7 @@ interface paymentI {
   modeOfPayment: string;
   paymentDate: Date;
   proofUrl: string;
+  invoiceUrl: string | undefined;
 }
 
 interface Booking {
@@ -185,6 +187,17 @@ export default function PaymentHistory() {
     setPendingpayments(pendingPayments.payments);
   }
 
+  
+    const handleGenerateInvoice = async (paymentId: string) => {
+      const res = await GenerateInvoice(paymentId);
+      if (res.success) {
+        toast.success("Invoice generated successfully!");
+        getMyAllPayments();
+      } else {
+        toast.error(res.message);
+      }
+    };
+
   useEffect(() => {
     getMyAllPayments();
     LoadPendingPayments();
@@ -277,6 +290,19 @@ export default function PaymentHistory() {
                           >
                             <Visibility /> View Details
                           </Button>
+                        </TableCell>
+                        <TableCell>
+                          {payment.invoiceUrl ? (
+                            <Button href={payment.invoiceUrl} download>
+                              Download Invoice
+                            </Button>
+                          ) : (payment.status === "Verified" ? <Button
+                            onClick={() => {
+                              handleGenerateInvoice(payment._id);
+                            }}
+                          >
+                            Genrate Invoice
+                          </Button>:"Wait For Verification")}
                         </TableCell>
                       </TableRow>
                     ))}

@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-
+// process.env.MONGODB_URI as string
 
 export default async function connect() {
     try {
-        mongoose.connect(process.env.MONGODB_URI as string);
+        mongoose.connect("mongodb://127.0.0.1:27017/scmsDB"!);
         const connection = mongoose.connection;
 
         connection.on('connected', () => {
@@ -18,7 +18,6 @@ export default async function connect() {
     } catch (error) {
         console.log("something went wrong");
         console.log(error);
-
     }
 
 }

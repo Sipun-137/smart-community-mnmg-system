@@ -69,3 +69,18 @@ export async function GetPendingPayments() {
     console.log(e);
   }
 } 
+
+
+export async function GenerateInvoice(id:string) {
+  try {
+    const response = await axios.get(`${base_url}/payments/invoice/${id}`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+    });
+    return response.data;
+  } catch (e: any) {
+    console.log(e);
+  }
+
+}

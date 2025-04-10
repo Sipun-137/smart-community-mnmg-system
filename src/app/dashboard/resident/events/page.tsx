@@ -79,8 +79,8 @@ export default function ResidentEventsPage() {
   const getMyId=async()=>{
     // TODO: Implement logic to fetch current user's ID
     const response = await getUserId();
-    if (response) {
-      setCurrentUserId(response);
+    if (response.success) {
+      setCurrentUserId(response.id ?? null);
     }
   }
   

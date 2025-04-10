@@ -5,13 +5,13 @@ import NextLink from "next/link";
 import { format } from "date-fns";
 import {
   Check,
-  Download,
+  // Download,
   Filter,
   MoreHorizontal,
   QrCode,
   Search,
   Trash2,
-  UserPlus,
+  // UserPlus,
   X,
 } from "lucide-react";
 
@@ -163,9 +163,9 @@ export function VisitorAdminDashboard() {
     }
   };
 
-  const handleExportData = () => {
-    toast.success("Visitor data has been exported to CSV.");
-  };
+  // const handleExportData = () => {
+  //   toast.success("Visitor data has been exported to CSV.");
+  // };
 
   // Get unique apartment numbers for filter
   const apartments = Array.from(new Set(visitor.map((v) => v.apartmentNo)));
@@ -289,21 +289,21 @@ export function VisitorAdminDashboard() {
             </PopoverContent>
           </Popover>
 
-          <Button
+          {/* <Button
             variant="outline"
             className="text-black"
             onClick={handleExportData}
           >
             <Download className="mr-2 h-4 w-4 " />
             Export
-          </Button>
+          </Button> */}
 
-          <Button asChild>
+          {/* <Button asChild>
             <NextLink href="/admin/visitors/new">
               <UserPlus className="mr-2 h-4 w-4" />
               Add Visitor
             </NextLink>
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -407,18 +407,18 @@ export function VisitorAdminDashboard() {
                                 </>
                               )}
 
-                              <DropdownMenuItem>
+                              {/* <DropdownMenuItem>
                                 <QrCode className="mr-2 h-4 w-4" />
                                 View QR Code
-                              </DropdownMenuItem>
+                              </DropdownMenuItem> */}
 
-                              <DropdownMenuItem asChild>
+                              {/* <DropdownMenuItem asChild>
                                 <NextLink
                                   href={`/admin/visitors/edit/${visitor._id}`}
                                 >
                                   Edit Details
                                 </NextLink>
-                              </DropdownMenuItem>
+                              </DropdownMenuItem> */}
 
                               <DropdownMenuItem
                                 className="text-destructive focus:text-destructive"

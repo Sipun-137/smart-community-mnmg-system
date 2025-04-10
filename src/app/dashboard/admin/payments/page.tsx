@@ -24,7 +24,11 @@ import { Search, Visibility, CheckCircle, Cancel } from "@mui/icons-material";
 import Image from "next/image";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
-import { GetAllPayments, UpdatePayment } from "@/services/PaymentService";
+import {
+  GenerateInvoice,
+  GetAllPayments,
+  UpdatePayment,
+} from "@/services/PaymentService";
 
 interface PaymentI {
   _id: string;
@@ -34,46 +38,9 @@ interface PaymentI {
   paymentDate: Date;
   modeOfPayment: "UPI" | "NetBanking" | "BankTransfer" | "Cash";
   proofUrl: string;
+  invoiceUrl: string | undefined;
 }
 
-// const payment = [
-//   {
-//     _id: "1",
-//     userId: { _id: "user1", name: "John Doe" },
-//     amount: 1500,
-//     status: "Pending",
-//     paymentDate: new Date("2023-05-15"),
-//     modeOfPayment: "UPI",
-//     proofUrl: "/placeholder.svg?height=300&width=400",
-//   },
-//   {
-//     _id: "2",
-//     userId: { _id: "user2", name: "Jane Smith" },
-//     amount: 2500,
-//     status: "UnderReview",
-//     paymentDate: new Date("2023-05-16"),
-//     modeOfPayment: "BankTransfer",
-//     proofUrl: "/placeholder.svg?height=300&width=400",
-//   },
-//   {
-//     _id: "3",
-//     userId: { _id: "user3", name: "Robert Johnson" },
-//     amount: 3000,
-//     status: "Verified",
-//     paymentDate: new Date("2023-05-14"),
-//     modeOfPayment: "NetBanking",
-//     proofUrl: "/placeholder.svg?height=300&width=400",
-//   },
-//   {
-//     _id: "4",
-//     userId: { _id: "user4", name: "Emily Davis" },
-//     amount: 1200,
-//     status: "Rejected",
-//     paymentDate: new Date("2023-05-13"),
-//     modeOfPayment: "Cash",
-//     proofUrl: "/placeholder.svg?height=300&width=400",
-//   },
-// ];
 
 export default function PaymentsAdmin() {
   const [payments, setPayment] = useState<PaymentI[]>([]);
@@ -81,6 +48,7 @@ export default function PaymentsAdmin() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedPayment, setSelectedPayment] = useState<PaymentI | null>(null);
   const [proofDialogOpen, setProofDialogOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const filteredPayments = payments.filter((payment) => {
     const matchesSearch =
@@ -112,6 +80,16 @@ export default function PaymentsAdmin() {
   const loadPayments = async () => {
     const data = await GetAllPayments();
     setPayment(data.payments);
+  };
+
+  const handleGenerateInvoice = async (paymentId: string) => {
+    const res = await GenerateInvoice(paymentId);
+    if (res.success) {
+      toast.success("Invoice generated successfully!");
+      loadPayments();
+    } else {
+      toast.error(res.message);
+    }
   };
 
   useEffect(() => {
@@ -165,6 +143,7 @@ export default function PaymentsAdmin() {
               <TableCell>Payment Method</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Actions</TableCell>
+              <TableCell>Generate Invoice</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -178,9 +157,24 @@ export default function PaymentsAdmin() {
                 <TableCell>{payment.modeOfPayment}</TableCell>
                 <TableCell>{payment.status}</TableCell>
                 <TableCell>
-                  <Button onClick={() => handleViewProof(payment)}>
+                  <Button onClick={() =>{ handleViewProof(payment);setPreviewUrl(payment.proofUrl);}}>
                     <Visibility />
                   </Button>
+                </TableCell>
+                <TableCell>
+                  {payment.invoiceUrl ? (
+                    <a href={payment.invoiceUrl} download>
+                      download
+                    </a>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        handleGenerateInvoice(payment._id);
+                      }}
+                    >
+                      Genrate Invoice
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -193,7 +187,7 @@ export default function PaymentsAdmin() {
         <DialogContent>
           {selectedPayment && (
             <Image
-              src={selectedPayment.proofUrl}
+              src={previewUrl || "/placeholder.svg"}
               alt="Payment Proof"
               width={400}
               height={300}
