@@ -3,7 +3,7 @@
 <p align="center"><i>Empowering Communities Through Seamless Interaction and Management</i></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/last%20commit-april-2ea44f" />
+  <img src="https://img.shields.io/badge/last%20commit-june-2ea44f" />
   <img src="https://img.shields.io/badge/typescript-99.2%25-blue" />
   <img src="https://img.shields.io/badge/languages-3-lightgrey" />
 </p>
